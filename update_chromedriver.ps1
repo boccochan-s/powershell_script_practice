@@ -1,5 +1,6 @@
-new-item -itemtype directory -name "chromedriver" -force > $null
-remove-item "./chromedriver/*"
+if ((test-path "chromedriver.exe") -eq $true) {
+    remove-item "./chromedriver.exe"
+}
 
 $current_chrome_ver = (get-childitem -path "C:\Program Files\Google\Chrome\Application" | where-object { $_.name -match "\d{3}" }).name -replace "\.\d+$", ""
 
@@ -10,5 +11,5 @@ $DL_uri = ($my_chrome_info[$my_chrome_info.count - 1].downloads.chromedriver | w
 
 invoke-webrequest -uri $DL_uri -outfile "./tmp.zip"
 expand-archive -path "./tmp.zip" -destinationpath "tmp" -force
-move-item -path "./tmp/chromedriver-win64/chromedriver.exe" -destination "./chromedriver/chromedriver.exe" -force
+move-item -path "./tmp/chromedriver-win64/chromedriver.exe" -destination "chromedriver.exe" -force
 remove-item "tmp*" -recurse
